@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 6: Evaluate & Revise (E) - Interactive Cafeteria Infographic</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Comic Neue & Fredoka -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+      background-color: #FFFBEB; /* Warm cream bakery background */
+      color: #374151;
+    }
+
+    /* Typography Utilities */
+    .font-spartan, .font-display {
+      font-family: 'Fredoka', 'Quicksand', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .font-comic {
+      font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    /* Headings, Buttons, Badges & Highlights use Fredoka for crisp, friendly legibility */
+    h1, h2, h3, h4, .baked-btn, .pill-badge, .stat-number {
+      font-family: 'Fredoka', 'Comic Neue', sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    /* 3D Tactile Container & Card Effects */
+    .baked-card {
+      background: #FFFFFF;
+      border: 4px solid #F3F4F6;
+      border-bottom-width: 8px;
+      border-color: rgba(217, 119, 6, 0.25);
+      border-radius: 1.75rem;
+      box-shadow: 0 10px 25px -5px rgba(180, 83, 9, 0.1), 0 8px 10px -6px rgba(180, 83, 9, 0.05);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .baked-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px rgba(180, 83, 9, 0.15);
+    }
+
+    .baked-btn {
+      border-radius: 1.25rem;
+      border-bottom-width: 5px;
+      font-weight: 700;
+      transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    .baked-btn:active {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+
+    .btn-amber {
+      background-color: #F59E0B;
+      border-color: #B45309;
+      color: #FFFFFF;
+    }
+    .btn-amber:hover { background-color: #D97706; }
+
+    .btn-emerald {
+      background-color: #10B981;
+      border-color: #047857;
+      color: #FFFFFF;
+    }
+    .btn-emerald:hover { background-color: #059669; }
+
+    .btn-rose {
+      background-color: #F43F5E;
+      border-color: #BE123C;
+      color: #FFFFFF;
+    }
+    .btn-rose:hover { background-color: #E11D48; }
+
+    .btn-purple {
+      background-color: #8B5CF6;
+      border-color: #6D28D9;
+      color: #FFFFFF;
+    }
+    .btn-purple:hover { background-color: #7C3AED; }
+
+    .btn-sky {
+      background-color: #0EA5E9;
+      border-color: #0369A1;
+      color: #FFFFFF;
+    }
+    .btn-sky:hover { background-color: #0284C7; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FEF3C7;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #F59E0B;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #D97706;
+    }
+
+    /* Badge Style */
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      border: 2px solid currentColor;
+    }
+
+    /* Tab Active States */
+    .tab-active {
+      background-color: #7C3AED !important;
+      color: #FFFFFF !important;
+      border-color: #4C1D95 !important;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .section-anchor {
+      scroll-margin-top: 100px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- Web Audio Synthesizer Script -->
+  <script>
+    // Audio Context Synthesizer for buttons (No external sound files required)
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playSound(type) {
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'pop') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.exponentialRampToValueAtTime(600, now + 0.08);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'chime') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'click') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(200, now);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        }
+      } catch (e) {
+        // Fallback silently if audio blocked
+      }
+    }
+  </script>
+
+  <!-- Sticky Top Navigation Header -->
+  <header class="sticky top-0 z-50 bg-amber-500/95 backdrop-blur-md border-b-4 border-amber-700 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToTop(); playSound('pop');">
+        <div class="bg-amber-100 border-2 border-amber-800 p-2 rounded-2xl shadow-inner text-2xl">
+          🥪
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-black text-white tracking-wide leading-none drop-shadow-md">
+            PHASE 6: EVALUATE & REVISE (E)
+          </h1>
+          <p class="text-xs sm:text-sm font-bold text-amber-100">
+            Cafeteria & Bakery Learning Evaluation Guide
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Audio Toggle & Overview Mode -->
+      <div class="flex items-center gap-2">
+        <button onclick="toggleAudio(); playSound('chime');" id="soundToggleBtn" class="baked-btn btn-emerald px-3 py-1.5 text-xs sm:text-sm flex items-center gap-1.5">
+          <span>🔔 Sound FX: ON</span>
+        </button>
+        <button onclick="scrollToTop(); playSound('pop');" class="baked-btn btn-rose px-3 py-1.5 text-xs sm:text-sm flex items-center gap-1.5">
+          <span>🔝 Top</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Scroll Strip -->
+    <div class="bg-amber-600/90 border-t border-amber-400/50 py-2 px-4 overflow-x-auto scrollbar-none flex items-center gap-2 text-xs font-bold text-white whitespace-nowrap font-spartan">
+      <span class="text-amber-200 uppercase tracking-wider text-[11px] mr-1">Sections:</span>
+      <button onclick="scrollToSection('sec61')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.1 Learner Achievement 🎯</button>
+      <button onclick="scrollToSection('sec62')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.2 Speaking Rubric 🗣️</button>
+      <button onclick="scrollToSection('sec63')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.3 Quiz Blueprint 📝</button>
+      <button onclick="scrollToSection('sec64')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.4 Class Mastery 📊</button>
+      <button onclick="scrollToSection('sec65')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.6 Methods & Media 💡</button>
+      <button onclick="scrollToSection('sec66')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.6 Revision Decisions 🔄</button>
+      <button onclick="scrollToSection('sec67')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.7 Remediation & Enrichment 🚀</button>
+      <button onclick="scrollToSection('sec68')" class="baked-btn btn-amber py-1 px-3 bg-amber-700 border-amber-900">6.8 Post-Lesson Reflection ✍️</button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 space-y-8">
+
+    <!-- Welcome & Core Overview Panel -->
+    <section class="baked-card p-6 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-100 border-amber-300">
+      <div class="flex flex-col lg:flex-row items-center gap-6">
+        <div class="text-6xl sm:text-7xl p-4 bg-white rounded-3xl border-4 border-amber-400 shadow-md text-center">
+          🧁
+        </div>
+        <div class="space-y-2 text-center lg:text-left flex-1">
+          <div class="inline-block px-3 py-1 bg-amber-200 text-amber-900 font-extrabold text-xs rounded-full border border-amber-400 uppercase tracking-widest">
+            Phase 6 Overview Rule
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-amber-950">
+            Evaluation & Lesson Revision Framework
+          </h2>
+          <p class="text-base sm:text-lg text-amber-900 font-medium leading-relaxed">
+            Evaluation covers three key areas: <strong>pupils' achievement of each objective</strong>, the <strong>effectiveness of methods and media</strong>, and <strong>decisions for revising the lesson</strong>.
+          </p>
+          <div class="p-3 bg-white/80 rounded-2xl border-2 border-amber-300 text-sm font-semibold text-amber-800 shadow-sm flex items-start gap-2">
+            <span class="text-xl">💡</span>
+            <span><strong>Crucial Note:</strong> Achievement is judged strictly from individual evidence. Group observation judges participation and cooperation, and group results are not used to assume that every member has mastered the objectives.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6.1 -->
+    <section id="sec61" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">🎯</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.1 Evaluating Learner Achievement</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">Objectives, Instruments, Evidence & Criteria</p>
+          </div>
+        </div>
+        <span class="hidden sm:inline-block pill-badge bg-amber-100 text-amber-800 border-amber-300">
+          Target: Individual Evidence
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Objective 1 -->
+        <div class="baked-card p-5 bg-white border-sky-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-3 -top-3 w-16 h-16 bg-sky-100 rounded-full border border-sky-300 -z-0"></div>
+          <div class="space-y-3 z-10">
+            <div class="flex items-center justify-between">
+              <span class="pill-badge bg-sky-100 text-sky-800 border-sky-400">Objective O1</span>
+              <span class="text-2xl">🗣️</span>
+            </div>
+            <h3 class="text-lg font-black text-sky-950">Vocabulary & Pronunciation</h3>
+            <p class="text-xs font-bold text-sky-700">(LS 1.1.1)</p>
+            
+            <div class="bg-sky-50 p-3 rounded-2xl border border-sky-200 space-y-2 text-xs">
+              <div>
+                <strong class="text-sky-900 block font-bold">📋 Instrument:</strong>
+                <p class="text-gray-700">Pronunciation checklist during Say It Right pairs, role-play and Exit Counter; Wayground items 6–8</p>
+              </div>
+              <div>
+                <strong class="text-sky-900 block font-bold">🔍 Evidence:</strong>
+                <p class="text-gray-700">Number of menu words pronounced clearly (out of 10), with /ɪ/ and /iː/ distinguished</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-sky-100 z-10">
+            <span class="text-xs font-bold text-gray-500 uppercase">Mastery Criterion</span>
+            <div class="text-base font-black text-sky-700 flex items-center gap-1">
+              <span>✅ At least 8 of 10 words</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Objective 2 -->
+        <div class="baked-card p-5 bg-white border-emerald-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-3 -top-3 w-16 h-16 bg-emerald-100 rounded-full border border-emerald-300 -z-0"></div>
+          <div class="space-y-3 z-10">
+            <div class="flex items-center justify-between">
+              <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-400">Objective O2</span>
+              <span class="text-2xl">🎧</span>
+            </div>
+            <h3 class="text-lg font-black text-emerald-950">Listening for Specific Information</h3>
+            <p class="text-xs font-bold text-emerald-700">(LS 1.2.2)</p>
+
+            <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 space-y-2 text-xs">
+              <div>
+                <strong class="text-emerald-900 block font-bold">📋 Instrument:</strong>
+                <p class="text-gray-700">Individual order slip (practice) and Wayground items 1–5 (assessment)</p>
+              </div>
+              <div>
+                <strong class="text-emerald-900 block font-bold">🔍 Evidence:</strong>
+                <p class="text-gray-700">Correct details: items, extras, drink, price, total</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-emerald-100 z-10">
+            <span class="text-xs font-bold text-gray-500 uppercase">Mastery Criterion</span>
+            <div class="text-base font-black text-emerald-700 flex items-center gap-1">
+              <span>✅ At least 4 of 5 details</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Objective 3 -->
+        <div class="baked-card p-5 bg-white border-purple-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-3 -top-3 w-16 h-16 bg-purple-100 rounded-full border border-purple-300 -z-0"></div>
+          <div class="space-y-3 z-10">
+            <div class="flex items-center justify-between">
+              <span class="pill-badge bg-purple-100 text-purple-800 border-purple-400">Objective O3</span>
+              <span class="text-2xl">💬</span>
+            </div>
+            <h3 class="text-lg font-black text-purple-950">Keeping an Interaction Going</h3>
+            <p class="text-xs font-bold text-purple-700">(LS 2.2.1)</p>
+
+            <div class="bg-purple-50 p-3 rounded-2xl border border-purple-200 space-y-2 text-xs">
+              <div>
+                <strong class="text-purple-900 block font-bold">📋 Instrument:</strong>
+                <p class="text-gray-700">Speaking rubric used during the role-play rounds</p>
+              </div>
+              <div>
+                <strong class="text-purple-900 block font-bold">🔍 Evidence:</strong>
+                <p class="text-gray-700">Exchanges, key phrases and suitable questions used</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-purple-100 z-10">
+            <span class="text-xs font-bold text-gray-500 uppercase">Mastery Criterion</span>
+            <div class="text-base font-black text-purple-700 flex items-center gap-1">
+              <span>✅ Level 3 or above on rubric</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Participation & Values -->
+        <div class="baked-card p-5 bg-white border-rose-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-3 -top-3 w-16 h-16 bg-rose-100 rounded-full border border-rose-300 -z-0"></div>
+          <div class="space-y-3 z-10">
+            <div class="flex items-center justify-between">
+              <span class="pill-badge bg-rose-100 text-rose-800 border-rose-400">Affective</span>
+              <span class="text-2xl">🤝</span>
+            </div>
+            <h3 class="text-lg font-black text-rose-950">Participation & Values</h3>
+            <p class="text-xs font-bold text-rose-700">(Cooperation & Politeness)</p>
+
+            <div class="bg-rose-50 p-3 rounded-2xl border border-rose-200 space-y-2 text-xs">
+              <div>
+                <strong class="text-rose-900 block font-bold">📋 Instrument:</strong>
+                <p class="text-gray-700">Observation checklist; traffic-light self-assessment</p>
+              </div>
+              <div>
+                <strong class="text-rose-900 block font-bold">🔍 Evidence:</strong>
+                <p class="text-gray-700">Cooperation, politeness, use of roles</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-rose-100 z-10">
+            <span class="text-xs font-bold text-gray-500 uppercase">Mastery Criterion</span>
+            <div class="text-base font-black text-rose-700 flex items-center gap-1">
+              <span>✅ Takes part in all roles & rounds</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 6.2 -->
+    <section id="sec62" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">🗣️</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.2 Speaking Rubric</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">Aligned to DSKP Performance Levels (1 to 6)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="baked-card p-6 bg-white overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[650px]">
+          <thead>
+            <tr class="border-b-4 border-amber-200">
+              <th class="p-3 text-sm font-black text-amber-900 bg-amber-50 rounded-tl-2xl">Criterion</th>
+              <th class="p-3 text-sm font-black text-rose-700 bg-rose-50 border-l-2 border-amber-100">
+                Levels 1–2 <span class="block text-xs font-normal text-rose-600">(Needs Support)</span>
+              </th>
+              <th class="p-3 text-sm font-black text-amber-700 bg-amber-100/60 border-l-2 border-amber-100">
+                Levels 3–4 <span class="block text-xs font-normal text-amber-800">(Secure - Target)</span>
+              </th>
+              <th class="p-3 text-sm font-black text-emerald-700 bg-emerald-50 rounded-tr-2xl border-l-2 border-amber-100">
+                Levels 5–6 <span class="block text-xs font-normal text-emerald-600">(Confident)</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-amber-100 text-xs sm:text-sm">
+            
+            <!-- Row 1 -->
+            <tr class="hover:bg-amber-50/50 transition-colors">
+              <td class="p-3 font-bold text-gray-900 bg-amber-50/30 flex items-center gap-2">
+                <span>🔄</span>
+                <span>Keeping the interaction going</span>
+              </td>
+              <td class="p-3 text-rose-900 bg-rose-50/30 border-l border-amber-100">
+                Needs teacher or peer prompts; fewer than 3 exchanges
+              </td>
+              <td class="p-3 text-amber-950 font-medium bg-amber-50/40 border-l border-amber-100">
+                Keeps going for at least 4 exchanges with the Phrase Bank
+              </td>
+              <td class="p-3 text-emerald-950 font-medium bg-emerald-50/30 border-l border-amber-100">
+                Keeps going independently for 5 or more exchanges and adds extra turns
+              </td>
+            </tr>
+
+            <!-- Row 2 -->
+            <tr class="hover:bg-amber-50/50 transition-colors">
+              <td class="p-3 font-bold text-gray-900 bg-amber-50/30 flex items-center gap-2">
+                <span>❓</span>
+                <span>Suitable questions</span>
+              </td>
+              <td class="p-3 text-rose-900 bg-rose-50/30 border-l border-amber-100">
+                Repeats questions only after prompting
+              </td>
+              <td class="p-3 text-amber-950 font-medium bg-amber-50/40 border-l border-amber-100">
+                Asks or answers at least 1 suitable question (<em>"Would you like...?" "Anything else?"</em>)
+              </td>
+              <td class="p-3 text-emerald-950 font-medium bg-emerald-50/30 border-l border-amber-100">
+                Asks 2 or more suitable questions and answers naturally
+              </td>
+            </tr>
+
+            <!-- Row 3 -->
+            <tr class="hover:bg-amber-50/50 transition-colors">
+              <td class="p-3 font-bold text-gray-900 bg-amber-50/30 flex items-center gap-2">
+                <span>💬</span>
+                <span>Key phrases</span>
+              </td>
+              <td class="p-3 text-rose-900 bg-rose-50/30 border-l border-amber-100">
+                Uses 1–3 key phrases with errors
+              </td>
+              <td class="p-3 text-amber-950 font-medium bg-amber-50/40 border-l border-amber-100">
+                Uses at least 4 key phrases accurately
+              </td>
+              <td class="p-3 text-emerald-950 font-medium bg-emerald-50/30 border-l border-amber-100">
+                Uses key phrases accurately and adds an opinion or reason
+              </td>
+            </tr>
+
+            <!-- Row 4 -->
+            <tr class="hover:bg-amber-50/50 transition-colors">
+              <td class="p-3 font-bold text-gray-900 bg-amber-50/30 flex items-center gap-2">
+                <span>📢</span>
+                <span>Pronunciation of menu words</span>
+              </td>
+              <td class="p-3 text-rose-900 bg-rose-50/30 border-l border-amber-100">
+                Many words unclear
+              </td>
+              <td class="p-3 text-amber-950 font-medium bg-amber-50/40 border-l border-amber-100">
+                At least 8 of 10 words clear; /ɪ/ and /iː/ mostly distinguished
+              </td>
+              <td class="p-3 text-emerald-950 font-medium bg-emerald-50/30 border-l border-amber-100">
+                All words clear with confident stress and intonation
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 6.3 -->
+    <section id="sec63" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">📝</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.3 Wayground Quiz Blueprint</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">8 Items (Individual Pupil Assessment)</p>
+          </div>
+        </div>
+        <span class="pill-badge bg-purple-100 text-purple-900 border-purple-300 text-xs">
+          Interactive Item Filter
+        </span>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-bold text-amber-900 mr-1">Filter by Objective:</span>
+        <button onclick="filterQuiz('all'); playSound('click');" id="btnQuizAll" class="baked-btn btn-purple px-3 py-1 text-xs tab-active">All (8 Items)</button>
+        <button onclick="filterQuiz('O1'); playSound('click');" id="btnQuizO1" class="baked-btn btn-sky px-3 py-1 text-xs">O1 Vocabulary & Sound (3 Items)</button>
+        <button onclick="filterQuiz('O2'); playSound('click');" id="btnQuizO2" class="baked-btn btn-emerald px-3 py-1 text-xs">O2 Listening (5 Items)</button>
+      </div>
+
+      <!-- Quiz Blueprint Items Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="quizGrid">
+        
+        <!-- Item 1 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O2">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 1</span>
+            <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-300 text-xs">Obj: O2</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Listening, Multiple Choice</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Hear a price (for example <em>'one pound twenty'</em>) and choose the correct number.
+          </p>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O2">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 2</span>
+            <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-300 text-xs">Obj: O2</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Listening, Multiple Choice</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Hear a price (for example <em>'four pounds ninety-five'</em>) and choose the correct number.
+          </p>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O2">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 3</span>
+            <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-300 text-xs">Obj: O2</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Listening, Picture Choice</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Hear a short order and choose the matching pictures. 🥪🧃
+          </p>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O2">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 4</span>
+            <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-300 text-xs">Obj: O2</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Listening, Multiple Choice</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Hear an order with prices and choose the correct total calculation.
+          </p>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O2">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 5</span>
+            <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-300 text-xs">Obj: O2</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Listening, Gap-Fill Choice</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Hear a waiter's line and choose the missing key phrase (<em>'Would you ... salad with that?'</em>).
+          </p>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O1">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 6</span>
+            <span class="pill-badge bg-sky-100 text-sky-800 border-sky-300 text-xs">Obj: O1</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Sound Recognition</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Which word has the same vowel sound as <strong>'cheese'</strong>? 🧀 (meat / chips / fish)
+          </p>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O1">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 7</span>
+            <span class="pill-badge bg-sky-100 text-sky-800 border-sky-300 text-xs">Obj: O1</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Picture to Word Match</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Match the picture to the word (for example <strong>vegetarian burger</strong> 🍔).
+          </p>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="baked-card p-4 bg-white border-amber-200 quiz-card" data-obj="O1">
+          <div class="flex justify-between items-center mb-2">
+            <span class="pill-badge bg-amber-100 text-amber-900 border-amber-300 text-xs">Item 8</span>
+            <span class="pill-badge bg-purple-100 text-purple-800 border-purple-300 text-xs">Obj: O1 / O3 support</span>
+          </div>
+          <h4 class="font-bold text-amber-950 text-sm mb-1">Polite Reply</h4>
+          <p class="text-xs text-gray-700 bg-amber-50 p-2 rounded-xl border border-amber-100">
+            Choose the polite reply to <em>'Anything else?'</em>.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="p-3 bg-purple-50 rounded-2xl border border-purple-200 text-xs font-semibold text-purple-900 flex items-center gap-2">
+        <span>📌</span>
+        <span><strong>Pedagogical Alignment:</strong> Quiz items use the same menu words and prices practised in the lesson, so that the quiz tests what was taught. The teacher checks the answer key before use.</span>
+      </div>
+    </section>
+
+    <!-- SECTION 6.4 -->
+    <section id="sec64" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">📊</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.4 Class Mastery Record</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">Interactive Class Target Tracker (24 Pupils Total)</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-bold text-amber-800 block">Class Target</span>
+          <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-300">At least 15 of 24 pupils</span>
+        </div>
+      </div>
+
+      <!-- Live Interactive Mastery Counter Widget -->
+      <div class="baked-card p-6 bg-gradient-to-br from-amber-50 to-orange-100 border-amber-300 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-amber-200 pb-4">
+          <div>
+            <h3 class="text-lg font-black text-amber-950">Pupil Mastery Quick Simulator</h3>
+            <p class="text-xs text-amber-800">Simulate or record pupil scores to verify if the 15/24 class target is achieved.</p>
+          </div>
+          <button onclick="fillSampleData(); playSound('chime');" class="baked-btn btn-emerald text-xs px-4 py-2">
+            ✨ Load Sample Class Record (24 Pupils)
+          </button>
+        </div>
+
+        <!-- Mastery Live Counters -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          
+          <div class="bg-white p-4 rounded-2xl border-2 border-sky-300 text-center shadow-sm">
+            <span class="text-xs font-extrabold text-sky-800 uppercase block font-spartan">O1 Vocab Mastery (≥8/10)</span>
+            <div id="o1MasteryCount" class="text-3xl font-black text-sky-600 my-1 stat-number">0 / 24</div>
+            <div id="o1TargetStatus" class="pill-badge bg-rose-100 text-rose-700 border-rose-300 text-xs">
+              Below Target (&lt;15)
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border-2 border-emerald-300 text-center shadow-sm">
+            <span class="text-xs font-extrabold text-emerald-800 uppercase block font-spartan">O2 Listening Mastery (≥4/5)</span>
+            <div id="o2MasteryCount" class="text-3xl font-black text-emerald-600 my-1 stat-number">0 / 24</div>
+            <div id="o2TargetStatus" class="pill-badge bg-rose-100 text-rose-700 border-rose-300 text-xs">
+              Below Target (&lt;15)
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border-2 border-purple-300 text-center shadow-sm">
+            <span class="text-xs font-extrabold text-purple-800 uppercase block font-spartan">O3 Speaking Mastery (≥Level 3)</span>
+            <div id="o3MasteryCount" class="text-3xl font-black text-purple-600 my-1 stat-number">0 / 24</div>
+            <div id="o3TargetStatus" class="pill-badge bg-rose-100 text-rose-700 border-rose-300 text-xs">
+              Below Target (&lt;15)
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Pupil Entry Table Preview (First 5 pupils editable, full list scrollable) -->
+        <div class="bg-white rounded-2xl border-2 border-amber-200 overflow-x-auto p-2">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr class="bg-amber-100/70 text-amber-900 border-b border-amber-200 font-bold">
+                <th class="p-2">Pupil</th>
+                <th class="p-2">O1 Words (/10)</th>
+                <th class="p-2">O2 Score (/5)</th>
+                <th class="p-2">O3 Level (1–6)</th>
+                <th class="p-2">Quiz Total (/8)</th>
+                <th class="p-2">Self-assessment</th>
+                <th class="p-2">Follow-up action</th>
+              </tr>
+            </thead>
+            <tbody id="pupilTableBody" class="divide-y divide-gray-100">
+              <!-- Dynamically Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6.5 -->
+    <section id="sec65" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">💡</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.5 Evaluating Effectiveness of Methods & Media</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">Six Key Evaluation Aspects</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+        <!-- Aspect 1 -->
+        <div class="baked-card p-5 bg-white border-amber-200 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 font-black text-base">
+            <span class="text-2xl">💻</span>
+            <span>Learning Value of Technology</span>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-2xl space-y-2 text-xs">
+            <p><strong>Evaluation Question:</strong> Did the menu board, pictures and audio help pupils recognise menu words and distinguish /ɪ/ and /iː/?</p>
+            <p class="text-amber-800 font-bold"><strong>Gathered via:</strong> Pronunciation checklist; Wayground item analysis for items 6–8</p>
+          </div>
+        </div>
+
+        <!-- Aspect 2 -->
+        <div class="baked-card p-5 bg-white border-amber-200 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 font-black text-base">
+            <span class="text-2xl">💬</span>
+            <span>Interaction</span>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-2xl space-y-2 text-xs">
+            <p><strong>Evaluation Question:</strong> Did the role cards and digital menu help all pupils speak, or did some pupils dominate?</p>
+            <p class="text-amber-800 font-bold"><strong>Gathered via:</strong> Observation of talk time per role; rubric records</p>
+          </div>
+        </div>
+
+        <!-- Aspect 3 -->
+        <div class="baked-card p-5 bg-white border-amber-200 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 font-black text-base">
+            <span class="text-2xl">⏱️</span>
+            <span>Time</span>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-2xl space-y-2 text-xs">
+            <p><strong>Evaluation Question:</strong> Did each stage take the planned time?</p>
+            <p class="text-amber-800 font-bold"><strong>Gathered via:</strong> Teacher notes with actual timings</p>
+          </div>
+        </div>
+
+        <!-- Aspect 4 -->
+        <div class="baked-card p-5 bg-white border-amber-200 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 font-black text-base">
+            <span class="text-2xl">📱</span>
+            <span>Access and Display</span>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-2xl space-y-2 text-xs">
+            <p><strong>Evaluation Question:</strong> Did devices, audio and QR codes work? Could all pupils see and hear?</p>
+            <p class="text-amber-800 font-bold"><strong>Gathered via:</strong> Teacher log of problems and the workaround used</p>
+          </div>
+        </div>
+
+        <!-- Aspect 5 -->
+        <div class="baked-card p-5 bg-white border-amber-200 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 font-black text-base">
+            <span class="text-2xl">🙋</span>
+            <span>Pupil Voice</span>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-2xl space-y-2 text-xs">
+            <p><strong>Evaluation Question:</strong> Which part of the lesson helped most?</p>
+            <p class="text-amber-800 font-bold"><strong>Gathered via:</strong> Three pupils asked at the exit counter; traffic-light results</p>
+          </div>
+        </div>
+
+        <!-- Aspect 6 -->
+        <div class="baked-card p-5 bg-white border-amber-200 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 font-black text-base">
+            <span class="text-2xl">🔒</span>
+            <span>Ethics and Safety</span>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-2xl space-y-2 text-xs">
+            <p><strong>Evaluation Question:</strong> Were privacy and fairness protected?</p>
+            <p class="text-amber-800 font-bold"><strong>Gathered via:</strong> Check that nicknames were used, no personal data was collected and recordings (if any) were deleted</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 6.6 -->
+    <section id="sec66" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">🔄</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.6 Revision Decisions</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">If Evidence Shows... Then Teacher Will...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        
+        <!-- Decision Item 1 -->
+        <div class="baked-card p-4 bg-white border-l-8 border-l-amber-500 border-gray-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="md:w-1/2 space-y-1">
+            <span class="text-xs font-black text-amber-700 uppercase tracking-wider block">If Evidence Shows:</span>
+            <p class="text-sm font-bold text-gray-900">Many pupils mispronounce the same words (for example <em>cheese</em> as <em>chips</em>)</p>
+          </div>
+          <div class="md:w-1/2 bg-amber-50 p-3 rounded-2xl border border-amber-200 space-y-1">
+            <span class="text-xs font-black text-emerald-700 uppercase tracking-wider block">Then the Teacher Will:</span>
+            <p class="text-sm text-amber-950">Change the examples, add minimal-pair practice and a short pronunciation game in the next lesson.</p>
+          </div>
+        </div>
+
+        <!-- Decision Item 2 -->
+        <div class="baked-card p-4 bg-white border-l-8 border-l-emerald-500 border-gray-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="md:w-1/2 space-y-1">
+            <span class="text-xs font-black text-emerald-700 uppercase tracking-wider block">If Evidence Shows:</span>
+            <p class="text-sm font-bold text-gray-900">Many pupils miss the total in the listening items</p>
+          </div>
+          <div class="md:w-1/2 bg-emerald-50 p-3 rounded-2xl border border-emerald-200 space-y-1">
+            <span class="text-xs font-black text-emerald-700 uppercase tracking-wider block">Then the Teacher Will:</span>
+            <p class="text-sm text-emerald-950">Replay shorter audio segments, show numbers after the second listening and add more price practice.</p>
+          </div>
+        </div>
+
+        <!-- Decision Item 3 -->
+        <div class="baked-card p-4 bg-white border-l-8 border-l-purple-500 border-gray-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="md:w-1/2 space-y-1">
+            <span class="text-xs font-black text-purple-700 uppercase tracking-wider block">If Evidence Shows:</span>
+            <p class="text-sm font-bold text-gray-900">Role-play stays at one or two exchanges</p>
+          </div>
+          <div class="md:w-1/2 bg-purple-50 p-3 rounded-2xl border border-purple-200 space-y-1">
+            <span class="text-xs font-black text-purple-700 uppercase tracking-wider block">Then the Teacher Will:</span>
+            <p class="text-sm text-purple-950">Add more sentence frames, extra situation cards and a stronger model conversation.</p>
+          </div>
+        </div>
+
+        <!-- Decision Item 4 -->
+        <div class="baked-card p-4 bg-white border-l-8 border-l-rose-500 border-gray-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="md:w-1/2 space-y-1">
+            <span class="text-xs font-black text-rose-700 uppercase tracking-wider block">If Evidence Shows:</span>
+            <p class="text-sm font-bold text-gray-900">Time is not enough</p>
+          </div>
+          <div class="md:w-1/2 bg-rose-50 p-3 rounded-2xl border border-rose-200 space-y-1">
+            <span class="text-xs font-black text-rose-700 uppercase tracking-wider block">Then the Teacher Will:</span>
+            <p class="text-sm text-rose-950">Shorten the digital demonstration and the second role-play round.</p>
+          </div>
+        </div>
+
+        <!-- Decision Item 5 -->
+        <div class="baked-card p-4 bg-white border-l-8 border-l-sky-500 border-gray-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="md:w-1/2 space-y-1">
+            <span class="text-xs font-black text-sky-700 uppercase tracking-wider block">If Evidence Shows:</span>
+            <p class="text-sm font-bold text-gray-900">Access is interrupted</p>
+          </div>
+          <div class="md:w-1/2 bg-sky-50 p-3 rounded-2xl border border-sky-200 space-y-1">
+            <span class="text-xs font-black text-sky-700 uppercase tracking-wider block">Then the Teacher Will:</span>
+            <p class="text-sm text-sky-950">Use printed equivalents and review the evidence again after remediation.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 6.7 -->
+    <section id="sec67" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">🚀</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.7 Remediation and Enrichment</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">Targeted Follow-up Activities & Progress Evidence</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Remediation 1 -->
+        <div class="baked-card p-5 bg-white border-sky-300 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="pill-badge bg-sky-100 text-sky-800 border-sky-400 text-xs">Need: Not yet mastered O1</span>
+              <span class="text-xl">🎴</span>
+            </div>
+            <h4 class="font-black text-sky-950 text-base">Small-Group Picture Practice</h4>
+            <p class="text-xs text-gray-700 mt-2 bg-sky-50 p-3 rounded-2xl border border-sky-100">
+              Small-group practice with six picture cards; repeat the menu words and the /ɪ/ and /iː/ minimal pairs; increase the number of cards gradually.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-sky-100">
+            <span class="text-xs font-bold text-sky-800 uppercase block">Evidence of Progress</span>
+            <p class="text-xs font-bold text-sky-900">Pupil says at least 8 of 10 words clearly in a re-check.</p>
+          </div>
+        </div>
+
+        <!-- Remediation 2 -->
+        <div class="baked-card p-5 bg-white border-emerald-300 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="pill-badge bg-emerald-100 text-emerald-800 border-emerald-400 text-xs">Need: Not yet mastered O2</span>
+              <span class="text-xl">🎧</span>
+            </div>
+            <h4 class="font-black text-emerald-950 text-base">Segmented Audio & Price Writing</h4>
+            <p class="text-xs text-gray-700 mt-2 bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
+              Re-listen to short dialogues in segments with picture support; practise writing prices heard.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-emerald-100">
+            <span class="text-xs font-bold text-emerald-800 uppercase block">Evidence of Progress</span>
+            <p class="text-xs font-bold text-emerald-900">Pupil answers at least 4 of 5 listening items in a new short quiz.</p>
+          </div>
+        </div>
+
+        <!-- Remediation 3 -->
+        <div class="baked-card p-5 bg-white border-purple-300 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="pill-badge bg-purple-100 text-purple-800 border-purple-400 text-xs">Need: Not yet mastered O3</span>
+              <span class="text-xl">🧑‍🤝‍🧑</span>
+            </div>
+            <h4 class="font-black text-purple-950 text-base">Buddy Role-Play & Teacher Modelling</h4>
+            <p class="text-xs text-gray-700 mt-2 bg-purple-50 p-3 rounded-2xl border border-purple-100">
+              Role-play with sentence frames and a buddy; teacher takes the waiter role to model suitable questions.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-purple-100">
+            <span class="text-xs font-bold text-purple-800 uppercase block">Evidence of Progress</span>
+            <p class="text-xs font-bold text-purple-900">Pupil keeps a conversation going for at least 4 exchanges.</p>
+          </div>
+        </div>
+
+        <!-- Enrichment -->
+        <div class="baked-card p-5 bg-white border-amber-400 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="pill-badge bg-amber-100 text-amber-900 border-amber-400 text-xs">Need: Mastered all objectives</span>
+              <span class="text-xl">⭐</span>
+            </div>
+            <h4 class="font-black text-amber-950 text-base">Enrichment: 'Special of the Day'</h4>
+            <p class="text-xs text-gray-700 mt-2 bg-amber-50 p-3 rounded-2xl border border-amber-100">
+              Create a 'special of the day' with a price, say why it is healthy and present it to the class. 🥗
+            </p>
+          </div>
+          <div class="pt-3 border-t border-amber-200">
+            <span class="text-xs font-bold text-amber-800 uppercase block">Evidence of Progress</span>
+            <p class="text-xs font-bold text-amber-900">Pupil links food, price and a reason accurately.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 6.8 -->
+    <section id="sec68" class="section-anchor space-y-4">
+      <div class="flex items-center justify-between border-b-4 border-amber-300 pb-2">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl p-2 bg-amber-200 rounded-2xl border-2 border-amber-400">✍️</span>
+          <div>
+            <h2 class="text-2xl font-black text-amber-900">6.8 Post-Lesson Reflection</h2>
+            <p class="text-xs sm:text-sm text-amber-700 font-bold">(To be completed with real evidence after teaching)</p>
+          </div>
+        </div>
+        <button onclick="saveReflectionNotes(); playSound('chime');" class="baked-btn btn-amber px-3 py-1.5 text-xs flex items-center gap-1">
+          💾 Save Reflection Notes
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Table 1: Achievement & Remediation -->
+        <div class="baked-card p-5 bg-white border-amber-300 space-y-4">
+          <h3 class="text-base font-black text-amber-950 border-b border-amber-200 pb-2 flex items-center gap-2">
+            <span>📝</span> Section 1: Achievement Summary
+          </h3>
+
+          <div class="space-y-3 text-xs">
+            
+            <div>
+              <label class="font-bold text-amber-900 block mb-1">Achievement Totals (out of 24):</label>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="bg-amber-50 p-2 rounded-xl border border-amber-200">
+                  <span class="block font-bold text-gray-700">O1 Target:</span>
+                  <input type="text" id="refO1" placeholder="e.g. 20/24" class="w-full bg-white border border-amber-300 rounded-lg p-1 text-xs font-bold">
+                </div>
+                <div class="bg-amber-50 p-2 rounded-xl border border-amber-200">
+                  <span class="block font-bold text-gray-700">O2 Target:</span>
+                  <input type="text" id="refO2" placeholder="e.g. 18/24" class="w-full bg-white border border-amber-300 rounded-lg p-1 text-xs font-bold">
+                </div>
+                <div class="bg-amber-50 p-2 rounded-xl border border-amber-200">
+                  <span class="block font-bold text-gray-700">O3 Target:</span>
+                  <input type="text" id="refO3" placeholder="e.g. 22/24" class="w-full bg-white border border-amber-300 rounded-lg p-1 text-xs font-bold">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="font-bold text-amber-900 block mb-1">Pupils needing remediation by objective:</label>
+              <textarea id="refRemediation" rows="3" placeholder="Write pupil names or notes for O1, O2, O3..." class="w-full bg-amber-50/50 border border-amber-300 rounded-xl p-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+            </div>
+
+            <div>
+              <label class="font-bold text-amber-900 block mb-1">Media that helped most, and why:</label>
+              <textarea id="refMedia" rows="3" placeholder="e.g. Digital menu board helped visual learners..." class="w-full bg-amber-50/50 border border-amber-300 rounded-xl p-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Table 2: Issues & Improvements -->
+        <div class="baked-card p-5 bg-white border-amber-300 space-y-4">
+          <h3 class="text-base font-black text-amber-950 border-b border-amber-200 pb-2 flex items-center gap-2">
+            <span>💡</span> Section 2: Lesson Logistics & Re-check
+          </h3>
+
+          <div class="space-y-3 text-xs">
+            
+            <div>
+              <label class="font-bold text-amber-900 block mb-1">Time, participation or access issues:</label>
+              <textarea id="refIssues" rows="2" placeholder="Note any timing delays or device issues..." class="w-full bg-amber-50/50 border border-amber-300 rounded-xl p-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+            </div>
+
+            <div>
+              <label class="font-bold text-amber-900 block mb-1">Improvements to materials or strategies:</label>
+              <textarea id="refImprovements" rows="2" placeholder="Actionable revisions for next session..." class="w-full bg-amber-50/50 border border-amber-300 rounded-xl p-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+            </div>
+
+            <div>
+              <label class="font-bold text-amber-900 block mb-1">Date of remediation and evidence of re-check:</label>
+              <input type="text" id="refRecheckDate" placeholder="e.g. 15 Oct - Re-check complete (8/10 clear)" class="w-full bg-amber-50/50 border border-amber-300 rounded-xl p-2 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400">
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Bar -->
+  <footer class="bg-amber-900 text-amber-100 border-t-4 border-amber-950 py-6 px-4 mt-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-center sm:text-left">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🍰</span>
+        <div>
+          <p class="font-bold text-white text-sm">Phase 6: Evaluate & Revise (E) Infographic</p>
+          <p class="text-amber-300">Complete Educational Pedagogy Guide (Sections 6.1 to 6.8)</p>
+        </div>
+      </div>
+      <p class="text-amber-200">
+        Organised using British English spelling & DSKP Performance Criteria
+      </p>
+    </div>
+  </footer>
+
+  <!-- Notification Toast Modal -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="baked-card bg-emerald-500 text-white px-5 py-3 border-emerald-700 flex items-center gap-3 shadow-xl">
+      <span class="text-2xl" id="toastIcon">🎉</span>
+      <div>
+        <p class="font-bold text-sm" id="toastTitle">Notes Saved!</p>
+        <p class="text-xs text-emerald-100" id="toastMsg">Your post-lesson reflection notes have been stored.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Audio Enable / Disable State
+    let isSoundEnabled = true;
+
+    function toggleAudio() {
+      isSoundEnabled = !isSoundEnabled;
+      const btn = document.getElementById('soundToggleBtn');
+      if (isSoundEnabled) {
+        btn.innerHTML = '<span>🔔 Sound FX: ON</span>';
+        btn.className = 'baked-btn btn-emerald px-3 py-1.5 text-xs sm:text-sm flex items-center gap-1.5';
+      } else {
+        btn.innerHTML = '<span>🔕 Sound FX: OFF</span>';
+        btn.className = 'baked-btn btn-rose px-3 py-1.5 text-xs sm:text-sm flex items-center gap-1.5';
+      }
+    }
+
+    // Wrap sound call with toggle check
+    const originalPlaySound = playSound;
+    playSound = function(type) {
+      if (isSoundEnabled) {
+        originalPlaySound(type);
+      }
+    };
+
+    // Smooth scroll helper
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // SECTION 6.3 - Quiz Blueprint Filter
+    function filterQuiz(category) {
+      const cards = document.querySelectorAll('.quiz-card');
+      const btnAll = document.getElementById('btnQuizAll');
+      const btnO1 = document.getElementById('btnQuizO1');
+      const btnO2 = document.getElementById('btnQuizO2');
+
+      // Reset Active Tab styles
+      btnAll.classList.remove('tab-active');
+      btnO1.classList.remove('tab-active');
+      btnO2.classList.remove('tab-active');
+
+      if (category === 'all') btnAll.classList.add('tab-active');
+      if (category === 'O1') btnO1.classList.add('tab-active');
+      if (category === 'O2') btnO2.classList.add('tab-active');
+
+      cards.forEach(card => {
+        const obj = card.getAttribute('data-obj');
+        if (category === 'all' || obj === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // SECTION 6.4 - Interactive Pupil Class Mastery Simulator Logic
+    let pupilRecords = [];
+
+    function initPupilData() {
+      pupilRecords = [];
+      for (let i = 1; i <= 24; i++) {
+        pupilRecords.push({
+          id: i,
+          o1Words: 0,
+          o2Score: 0,
+          o3Level: 1,
+          quizTotal: 0,
+          selfAssessment: 'Need help',
+          action: 'Pending'
+        });
+      }
+      renderPupilTable();
+      calculateMasteryTotals();
+    }
+
+    function renderPupilTable() {
+      const tbody = document.getElementById('pupilTableBody');
+      tbody.innerHTML = '';
+
+      pupilRecords.forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = idx % 2 === 0 ? 'bg-white' : 'bg-amber-50/30';
+        tr.innerHTML = `
+          <td class="p-2 font-bold text-amber-950">Pupil ${p.id}</td>
+          <td class="p-2">
+            <input type="number" min="0" max="10" value="${p.o1Words}" onchange="updatePupil(${p.id}, 'o1Words', this.value)" class="w-12 border border-gray-300 rounded px-1 py-0.5 text-center font-bold text-sky-700">
+          </td>
+          <td class="p-2">
+            <input type="number" min="0" max="5" value="${p.o2Score}" onchange="updatePupil(${p.id}, 'o2Score', this.value)" class="w-12 border border-gray-300 rounded px-1 py-0.5 text-center font-bold text-emerald-700">
+          </td>
+          <td class="p-2">
+            <select onchange="updatePupil(${p.id}, 'o3Level', this.value)" class="border border-gray-300 rounded px-1 py-0.5 font-bold text-purple-700">
+              <option value="1" ${p.o3Level == 1 ? 'selected' : ''}>L1</option>
+              <option value="2" ${p.o3Level == 2 ? 'selected' : ''}>L2</option>
+              <option value="3" ${p.o3Level == 3 ? 'selected' : ''}>L3</option>
+              <option value="4" ${p.o3Level == 4 ? 'selected' : ''}>L4</option>
+              <option value="5" ${p.o3Level == 5 ? 'selected' : ''}>L5</option>
+              <option value="6" ${p.o3Level == 6 ? 'selected' : ''}>L6</option>
+            </select>
+          </td>
+          <td class="p-2 font-bold text-gray-800">${p.o1Words > 0 || p.o2Score > 0 ? (Math.min(8, p.o2Score + Math.floor(p.o1Words/2))) : 0}/8</td>
+          <td class="p-2">
+            <span class="pill-badge ${p.o1Words >= 8 && p.o2Score >= 4 ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-amber-100 text-amber-800 border-amber-300'} text-[10px]">
+              ${p.o1Words >= 8 && p.o2Score >= 4 ? '🟢 Confident' : '🟡 Needs Practice'}
+            </span>
+          </td>
+          <td class="p-2 text-gray-600">${p.action}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updatePupil(id, field, value) {
+      const pupil = pupilRecords.find(p => p.id === id);
+      if (pupil) {
+        pupil[field] = parseInt(value) || 0;
+        
+        // Auto update follow-up action text based on mastery
+        if (pupil.o1Words < 8) {
+          pupil.action = 'Small-group /ɪ/ & /iː/ cards';
+        } else if (pupil.o2Score < 4) {
+          pupil.action = 'Re-listen short dialogues';
+        } else if (pupil.o3Level < 3) {
+          pupil.action = 'Role-play with buddy & frames';
+        } else {
+          pupil.action = 'Enrichment: Special of the Day';
+        }
+
+        playSound('pop');
+        calculateMasteryTotals();
+      }
+    }
+
+    function calculateMasteryTotals() {
+      let o1Count = 0;
+      let o2Count = 0;
+      let o3Count = 0;
+
+      pupilRecords.forEach(p => {
+        if (p.o1Words >= 8) o1Count++;
+        if (p.o2Score >= 4) o2Count++;
+        if (p.o3Level >= 3) o3Count++;
+      });
+
+      // Update O1 Display
+      document.getElementById('o1MasteryCount').innerText = `${o1Count} / 24`;
+      updateBadge('o1TargetStatus', o1Count >= 15);
+
+      // Update O2 Display
+      document.getElementById('o2MasteryCount').innerText = `${o2Count} / 24`;
+      updateBadge('o2TargetStatus', o2Count >= 15);
+
+      // Update O3 Display
+      document.getElementById('o3MasteryCount').innerText = `${o3Count} / 24`;
+      updateBadge('o3TargetStatus', o3Count >= 15);
+    }
+
+    function updateBadge(elementId, isAchieved) {
+      const el = document.getElementById(elementId);
+      if (isAchieved) {
+        el.innerText = '✅ Class Target Met (≥15)';
+        el.className = 'pill-badge bg-emerald-100 text-emerald-800 border-emerald-300 text-xs font-bold';
+      } else {
+        el.innerText = '❌ Below Target (<15)';
+        el.className = 'pill-badge bg-rose-100 text-rose-700 border-rose-300 text-xs font-bold';
+      }
+    }
+
+    function fillSampleData() {
+      // Load realistic sample data where most pupils achieve mastery
+      for (let i = 1; i <= 24; i++) {
+        const pupil = pupilRecords[i - 1];
+        if (i <= 18) { // 18 pupils pass (above target 15)
+          pupil.o1Words = Math.floor(Math.random() * 3) + 8; // 8-10
+          pupil.o2Score = Math.floor(Math.random() * 2) + 4; // 4-5
+          pupil.o3Level = Math.floor(Math.random() * 3) + 3; // 3-5
+          pupil.action = 'Enrichment: Special of the Day';
+        } else {
+          pupil.o1Words = Math.floor(Math.random() * 3) + 5; // 5-7
+          pupil.o2Score = Math.floor(Math.random() * 2) + 2; // 2-3
+          pupil.o3Level = Math.floor(Math.random() * 2) + 1; // 1-2
+          pupil.action = 'Small-group remediation';
+        }
+      }
+      renderPupilTable();
+      calculateMasteryTotals();
+      showToast('Sample Loaded!', '24 pupils loaded with target scores.');
+    }
+
+    // SECTION 6.8 - Save Reflection Notes
+    function saveReflectionNotes() {
+      const data = {
+        refO1: document.getElementById('refO1').value,
+        refO2: document.getElementById('refO2').value,
+        refO3: document.getElementById('refO3').value,
+        refRemediation: document.getElementById('refRemediation').value,
+        refMedia: document.getElementById('refMedia').value,
+        refIssues: document.getElementById('refIssues').value,
+        refImprovements: document.getElementById('refImprovements').value,
+        refRecheckDate: document.getElementById('refRecheckDate').value
+      };
+
+      try {
+        localStorage.setItem('phase6_reflection_notes', JSON.stringify(data));
+      } catch(e) {}
+
+      showToast('Reflection Saved!', 'Teacher notes stored for post-lesson review.');
+    }
+
+    function loadReflectionNotes() {
+      try {
+        const saved = localStorage.getItem('phase6_reflection_notes');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.refO1) document.getElementById('refO1').value = data.refO1;
+          if (data.refO2) document.getElementById('refO2').value = data.refO2;
+          if (data.refO3) document.getElementById('refO3').value = data.refO3;
+          if (data.refRemediation) document.getElementById('refRemediation').value = data.refRemediation;
+          if (data.refMedia) document.getElementById('refMedia').value = data.refMedia;
+          if (data.refIssues) document.getElementById('refIssues').value = data.refIssues;
+          if (data.refImprovements) document.getElementById('refImprovements').value = data.refImprovements;
+          if (data.refRecheckDate) document.getElementById('refRecheckDate').value = data.refRecheckDate;
+        }
+      } catch(e) {}
+    }
+
+    function showToast(title, msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastTitle').innerText = title;
+      document.getElementById('toastMsg').innerText = msg;
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // Initialize on window load
+    window.onload = function() {
+      initPupilData();
+      loadReflectionNotes();
+    };
+  </script>
+</body>
+</html>
